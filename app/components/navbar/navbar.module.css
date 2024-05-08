@@ -1,0 +1,25 @@
+.contianer {
+    height: 12em;
+    display: flex;
+    align-items: start;
+    justify-content: right;
+    background-image: url("../../../public/teapot2.jpeg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size:cover;
+}
+
+.links {
+    display: flex;
+    gap: 20px;
+    align-items: right;
+    justify-content: center;
+    padding-right: 25px;
+    padding-top: 25px;
+}
+
+.links a {
+    color: antiquewhite;
+    font-size: 1.5em;
+    text-decoration: none;
+}
