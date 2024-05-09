@@ -1,7 +1,4 @@
-
 export async function GET(req,res) {
-
-    console.log('----------- in getProducts')
 
     const { MongoClient} = require ('mongodb');
     const url = process.env.MONGO_CONN;
@@ -10,10 +7,8 @@ export async function GET(req,res) {
     const dbName = process.env.MONGO_DB; // database name
     await client.connect();
 
-    console.log('Connection OK');
-
     const db = client.db(dbName);
-    const colleciton = db.collection('products');
+    const colleciton = db.collection('shopping_cart');
 
 
     //fetch results

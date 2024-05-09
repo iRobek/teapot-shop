@@ -1,3 +1,6 @@
+// import { getProducts } from "./api/getProducts/route";
+
+
 'use client';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -9,6 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Image from 'next/image'
 
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -16,37 +20,31 @@ import {ThemeProvider } from '@mui/material/styles';
 
 import { createTheme } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+
+import styles from "./dashboard.module.css";
 
 
+export default function Dashboard() {
 
-export default function Page() {
-  //
-  // function for putting items into the shopping cart.
-  //
-  function putInCart(pname){
-        console.log("putting in cart: " + pname)
-        fetch("api/putInCart?pname="+pname); 
+  //Function for adding items into the cart
+  function addToCart(prodName) {
+    console.log(prodName);
+    fetch("http://localhost:3000/api/addToCart?prodName="+prodName);
   }
 
-  const [data, setData] = useState(null)
-  const [weather, setWeatherData] = useState(0)
- 
+  const [products, setProducts] = useState(null)
+
   useEffect(() => {
-    fetch('api/getProducts')
+    fetch('http://localhost:3000/api/getProducts')
       .then((res) => res.json())
-      .then((data) => {
-        setData(data)
+      .then((products) => {
+        setProducts(products)
       })
+    }, [])
+  
 
-      fetch('api/getWeather')
-      .then((res) => res.json())
-      .then((weather) => {
-        setWeatherData(weather)
-      })
-  }, []) 
-
-  if (!data) return <p>No data</p>
+  if(!products) return<p>Loading...</p>
 
   const theme = createTheme({
     palette: {
@@ -55,39 +53,41 @@ export default function Page() {
         main: green[500],
       },
     },
-  });
-  
+    });
+   
+    return (
 
-  if (!weather) return <p>No weather</p>
-  
-  return (
-    <ThemeProvider theme={theme}>
-      Today's temperature: {JSON.stringify(weather.temp)}
-    <Container component="main"  maxWidth="xs">
- 
-       <div style={{fontSize: '40px'}} > Dashboard</div>
+      <ThemeProvider theme={theme}>
+      <Container component="main"  maxWidth="xs">
+     
+        <div style={{fontSize: '40px'}} > Product list</div>
         <div>
-      {
-        data.map((item, i) => (
-          <div style={{padding: '20px'}} key={i} >
-            Unique ID: {item._id}
-            <br></br>
-            {item.pname}
-            - 
-            {item.price}
-            <br></br>
-            <Button onClick={() => putInCart(item.pname)} variant="outlined"> Add to cart </Button>
-          </div>
-        ))
-      }
-    </div>
+          {products.map((product, i) => (
+              <div className= {styles.prodCard} style={{padding: '20px'}} key={i} >
+                Unique ID: {product._id}
+                <br/>
+                <div>
+                <Image
+                  src={`/${product.img}.jpeg`}
+                  width={200}
+                  height={200}
+                  alt="Picture of the author"
+                />
+                </div>
+                <h3>{product.name}</h3>
+                <p>{product.desc}</p>
+                Price: {product.price} EUR
+                <br/>
+                <Button onClick={()=>addToCart(product.name)} variant="outlined"> Add to cart </Button>
+              </div>
+            ))
+          }
+      </div>
+    
+      </Container>
+    
+      </ThemeProvider>
+    
+      );
 
-    </Container>
-
-    </ThemeProvider>
-
-  );
 }
-
-
-
