@@ -18,7 +18,7 @@ export const authConfig = {
         } else if (isLoggedIn){
           return Response.redirect(new URL("/dashboard", request.nextUrl));
         }
-        return true;
+        return false;
     },
   },
   providers: [],

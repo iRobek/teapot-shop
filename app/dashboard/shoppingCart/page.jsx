@@ -46,12 +46,12 @@ export default function Cart () {
                 ))}
             </table>
             <br/>
-            <Button onClick={() => submitOrder(prod.product_name, prod.quantity, prod.price)}
+            {/* <Button onClick={() => submitOrder(prod.product_name, prod.quantity, prod.price)}
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}>
                 Place order
-            </Button>
+            </Button> */}
         </div>
     )
 }

@@ -1,9 +1,6 @@
-import { auth } from "@/app/auth";
+
 
 export async function GET(req,res) {
-
-    const session = await auth();
-    
 
     const { MongoClient} = require ('mongodb');
     const url = process.env.MONGO_CONN;
@@ -17,7 +14,7 @@ export async function GET(req,res) {
 
 
     //fetch results
-    const products = await colleciton.find({username: session.user.username}).toArray();
-    return Response.json(products);
+    const orders = await colleciton.find({}).toArray();
+    return Response.json(orders);
 
 }
