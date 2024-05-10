@@ -1,4 +1,5 @@
-"use client";
+
+
 
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -18,74 +19,13 @@ import {ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
 
-import Script from 'next/script'
-
+import { loginUser } from '../lib/server-actions';
 
 export default function Page() {
-
-
-  function onloadCallback() {
-    alert("grecaptcha is ready!");
-  };
-
-  /*
-  This function does the actual work
-  calling the fetch to get things from the database.
-  */ 
-  async function runDBCallAsync(url, newurl) {
-
-    const res = await fetch(newurl);
-    const data = await res.json();
-
-    console.log(data) 
-  }
-
-
-  /*
-
-  When the button is clicked, this is the event that is fired.
-  The first thing we need to do is prevent the default refresh of the page.
-  */
-  function onSubmit(token) {
-        console.log(token)
-  }
-
-
-  const handleSubmit = (event) => {		
-		console.log("handling submit");
-
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        let resp = data.get('g-recaptcha-response');
-        let newurl = ('https://www.google.com/recaptcha/api/siteverify?secret=SECRET_KEY&response='+resp);
-
-        let email = data.get('email')
-		let pass = data.get('pass')
-
-        console.log("Sent email:" + email)
-        console.log("Sent pass:" + pass)
-
-        runDBCallAsync(`api/register?email=${email}&pass=${pass}`, newurl)
-  }; // end handler
-
-
-  
-  const theme = createTheme({
-    palette: {
-        secondary: {
-            main: green[500],
-      },
-    },
-  });
-  
-
+ 
   return (
-    <ThemeProvider theme={theme}>
 
-    <Container component="main"  maxWidth="xs">
-      <CssBaseline />
-      <Box
+    <Box
         sx={{
           marginTop: 8,
           display: 'flex',
@@ -93,66 +33,42 @@ export default function Page() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          
-        </Avatar>
-        <Typography component="h1" variant="h5">
-        Log in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="pass"
-                    label="Pass"
-                    type="pass"
-                    id="pass"
-                    autoComplete="current-password"
-                />
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                />
 
-                <div  className="g-recaptcha" data-sitekey="6LdRBRYpAAAAAL7aly5-qD0OQvsN13H5bUzwYATA"></div>
-                <Button 
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    Log in
-                </Button>
+      <form action={loginUser}>
 
-                <Grid container>
-                    <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
-                        </Link>
-                    </Grid>
-                    <Grid item>
-                        <Link href="/register" variant="body2">
-                            {"Don't have an account? Sign Up"}
-                        </Link>
-                    </Grid>
-                </Grid>
-            </Box>
-        </Box>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
 
-    </Container>
-    <Script src="https://www.google.com/recaptcha/api.js"/>
-    </ThemeProvider>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="pass"
+            label="Password"
+            type="password"
+            id="pass"
+            autoComplete="current-password"
+          />
 
-  );
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+              Log in
+          </Button>   
+      </form>
+
+    </Box>
+
+  )
 }

@@ -11,9 +11,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import {ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
+
 export default function Page() {
 
 /*THE REGISTER PAGE*/
@@ -55,14 +58,14 @@ export default function Page() {
 
     let email = data.get('email')
 		let pass = data.get('pass')
-		let dob = data.get('dob')
+		let role = data.get('role')
 
     console.log("Sent email:" + email)
     console.log("Sent pass:" + pass)
-    console.log("Sent dob:" + dob)
+    console.log("Sent role:" + role)
 
 
-    runDBCallAsync(`api/register?email=${email}&pass=${pass}`)
+    runDBCallAsync(`api/register?email=${email}&pass=${pass}&role=${role}`)
 
 
 
@@ -78,6 +81,12 @@ export default function Page() {
       },
     },
   });
+
+//for the select input
+  const [role, setRole] = React.useState('');
+  const handleChange = (event) => {
+    setRole(event.target.value);
+  };
   
   
   return (
@@ -120,20 +129,18 @@ export default function Page() {
             autoComplete="current-password"
           />
 
-          <TextField
-            margin="normal"
-            required
+        <Select
+            id="role"
+            value={role}
+            label="Select role"
+            name='role'
             fullWidth
-            name="dob"
-            label="Date of Birth"
-            type="text"
-            id="dob"
-            autoComplete=""
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+            required
+            onChange={handleChange} >
+              <MenuItem value={'User'}>User</MenuItem>
+              <MenuItem value={'Admin'}>Admin</MenuItem>
+          </Select>
+      
           <Button
             type="submit"
             fullWidth

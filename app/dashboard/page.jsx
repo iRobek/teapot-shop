@@ -23,6 +23,7 @@ import { green, purple } from '@mui/material/colors';
 import { useState, useEffect } from 'react';
 
 import styles from "./dashboard.module.css";
+import { logOut } from "@/app/lib/server-actions";
 
 
 export default function Dashboard() {
@@ -59,8 +60,16 @@ export default function Dashboard() {
 
       <ThemeProvider theme={theme}>
       <Container component="main"  maxWidth="xs">
+      
      
         <div style={{fontSize: '40px'}} > Product list</div>
+
+        <div>
+        <form action={logOut}>
+          <button>Logout</button>
+        </form>
+      </div>
+
         <div>
           {products.map((product, i) => (
               <div className= {styles.prodCard} style={{padding: '20px'}} key={i} >

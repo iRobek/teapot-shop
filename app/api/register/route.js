@@ -11,37 +11,29 @@ export async function GET(req, res) {
     const { searchParams } = new URL(req.url)
     const email = searchParams.get('email')
     const pass = searchParams.get('pass')
-    //const dob = searchParams.get('dob')
-  
-  
-    console.log(email);
-    console.log(pass);
-    //console.log(dob);
-  
+    const role = searchParams.get('role')
+    
    // =================================================
-  const { MongoClient } = require('mongodb');
+    const { MongoClient } = require('mongodb');
   //your URL to atlas goes here 
     const url = process.env.MONGO_CONN;
     const client = new MongoClient(url);
     
    //connect to the database and the collection 
-    const dbName = process.env.MONGO_DB; // database name
-    await client.connect();
+     const dbName = process.env.MONGO_DB; // database name
+     await client.connect();
+ 
+     console.log('Connected successfully to server');
+     const db = client.db(dbName);
+     const collection = db.collection('login'); // collection name
+   
+   
+     const findResult = await collection.insertOne({"username": email, "pass": pass, "role": role});
+     console.log('Found documents =>', findResult);
+     let valid=true;
+     
+     return Response.json({ "data":"" + valid + ""});
 
-    console.log('Connected successfully to server');
-    const db = client.db(dbName);
-    const collection = db.collection('login'); // collection name
-  
-  
-  const findResult = await collection.insertOne({"username": email, "pass": pass});
-  console.log('Found documents =>', findResult);
-  let valid=true;
-  
-  
-   //==========================================================
-  
-    // at the end of the process we need to send something back.
-    return Response.json({ "data":"" + valid + ""})
   }
   
   
